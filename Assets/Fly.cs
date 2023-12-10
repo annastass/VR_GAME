@@ -2,32 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.UI;
 
 public class Fly : MonoBehaviour
 {
-    private TrackedPoseDriver headPose;
 
-    public float speed = 2.0f;
-    private Rigidbody rb;
-    [SerializeField]
-    private int coins;
+        [SerializeField]
+        public float speed = 2.0f;
+        private Rigidbody rb;
+        public int coins = 0;
+        public Text cointText;
+        private TrackedPoseDriver headPose;
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        headPose = Camera.main.GetComponent<TrackedPoseDriver>();
-    }
+        private void Start()
+        {
+            rb = GetComponent<Rigidbody>();
+            headPose = Camera.main.GetComponent<TrackedPoseDriver>();
+         
+        }
 
-    private void Update()
-    {
-        Vector3 headForward = headPose.transform.forward;
-        Vector3 headRight = headPose.transform.right;
+        private void Update()
+        {
+            Vector3 headForward = headPose.transform.forward;
+            Vector3 headRight = headPose.transform.right;
 
-        float moveHorizontal = Input.GetAxis("Horizontal"); // Допустим, управление происходит с использованием клавиш клавиатуры или контроллера
-        float moveVertical = Input.GetAxis("Vertical");
+            float moveHorizontal = Input.GetAxis("Horizontal"); // Допустим, управление происходит с использованием клавиш клавиатуры или контроллера
+            float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection = headForward * moveVertical + headRight * moveHorizontal;
-        rb.velocity = moveDirection * speed;
+            Vector3 moveDirection = headForward * moveVertical + headRight * moveHorizontal;
+            rb.velocity = moveDirection * speed;
+            cointText.text = coins.ToString();
     }
 
     private void OnTriggerEnter(Collider other)
