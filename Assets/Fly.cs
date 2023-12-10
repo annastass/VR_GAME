@@ -10,6 +10,8 @@ public class Fly : MonoBehaviour
     float eulerAngY;
     [SerializeField]
     float eulerAngZ;
+    [SerializeField]
+    private int coins;
 
 
     private bool turnLeft;
@@ -17,7 +19,7 @@ public class Fly : MonoBehaviour
     private bool dive;
     private bool climb;
 
-    public float speed = 0.5f;
+    public float speed = 0.1f;
     public float turnSpeed = 0.4f;
 
 
@@ -34,6 +36,7 @@ public class Fly : MonoBehaviour
         GetAngles();
         Stabilize();
         ForwardMovement();
+        //OnTriggerEnter();
     }
 
     private void ForwardMovement()
@@ -64,6 +67,15 @@ public class Fly : MonoBehaviour
             transform.eulerAngles = new Vector3(eulerAngX, eulerAngY, eulerAngZ);
         }
     }
-        
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Coin"))
+        {
+            coins++;
+            other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
+        }
+    }
+
 }
