@@ -1,10 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class Fly : MonoBehaviour
 {
+    private TrackedPoseDriver headPose;
+
+    public float speed = 2.0f;
+    private Rigidbody rb;
     [SerializeField]
+    private int coins;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        headPose = Camera.main.GetComponent<TrackedPoseDriver>();
+    }
+
+    private void Update()
+    {
+        Vector3 headForward = headPose.transform.forward;
+        Vector3 headRight = headPose.transform.right;
+
+        float moveHorizontal = Input.GetAxis("Horizontal"); // Допустим, управление происходит с использованием клавиш клавиатуры или контроллера
+        float moveVertical = Input.GetAxis("Vertical");
+
+        Vector3 moveDirection = headForward * moveVertical + headRight * moveHorizontal;
+        rb.velocity = moveDirection * speed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("HELLO");
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            coins++;
+            other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
+        }
+    }
+}
+   /* [SerializeField]
     float eulerAngX;
     [SerializeField]
     float eulerAngY;
@@ -78,4 +115,86 @@ public class Fly : MonoBehaviour
         }
     }
 
-}
+    private void Turn()
+    {
+        if(turnLeft)
+        {
+            eulerAngZ = eulerAngZ + turnSpeed;
+            transform.eulerAngles = new Vector3(eulerAngX, eulerAngY, eulerAngZ);
+        }
+
+        if (turnRight)
+        {
+            eulerAngZ = eulerAngZ - turnSpeed;
+            transform.eulerAngles = new Vector3(eulerAngX, eulerAngY, eulerAngZ);
+        }
+
+        if (dive)
+        {
+            eulerAngX = eulerAngX + turnSpeed;
+            transform.eulerAngles = new Vector3(eulerAngX, eulerAngY, eulerAngZ);
+        }
+        if (climb)
+        {
+            bool sharpTurnNoLiftLeft = eulerAngZ < 92 && eulerAngZ > 69;
+            bool sharpTurnLittleLiftLeft = eulerAngZ < 69 && eulerAngZ > 49;
+            bool mildTurnAndLiftLeft = eulerAngZ < 49 && eulerAngZ > 29;
+            bool sharpTurnNoLiftRight = eulerAngZ < 269 && eulerAngZ > 292;
+            bool sharpTurnLittleLiftRight = eulerAngZ < 292 && eulerAngZ > 312;
+            bool mildTurnAndLiftRight = eulerAngZ < 312 && eulerAngZ > 332;
+
+
+            if (sharpTurnNoLiftLeft)
+            {
+                eulerAngY -= turnSpeed * Time.deltaTime * 100f;
+
+            }
+
+             else if (sharpTurnLittleLiftLeft)
+            {
+                eulerAngY -= turnSpeed * Time.deltaTime * 85f;
+                eulerAngX -= turnSpeed * Time.deltaTime * 20f;
+
+            }
+             else if (mildTurnAndLiftLeft)
+            {
+                eulerAngY -= turnSpeed * Time.deltaTime * 40f;
+                eulerAngX -= turnSpeed * Time.deltaTime * 60f;
+
+            }
+            else if (sharpTurnNoLiftRight)
+            {
+                eulerAngY += turnSpeed * Time.deltaTime * 100f;
+
+            }
+            else if (sharpTurnLittleLiftRight)
+            {
+                eulerAngY += turnSpeed * Time.deltaTime * 85f;
+                eulerAngX -= turnSpeed * Time.deltaTime * 20f;
+
+
+            }
+            else if (mildTurnAndLiftRight)
+            {
+
+                eulerAngY += turnSpeed * Time.deltaTime * 40f;
+                eulerAngX -= turnSpeed * Time.deltaTime * 60f;
+
+            }
+            else
+            {
+                eulerAngX -= turnSpeed;
+            }
+
+            transform.eulerAngles = new Vector3(eulerAngX, eulerAngY, eulerAngZ);
+
+        }
+    }
+
+    private void GetTurn()
+    {
+        Vector3 flyDirection = 
+        if (OVRInput.GetDown())
+    }//
+
+}*/
