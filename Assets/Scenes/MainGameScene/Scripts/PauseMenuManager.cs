@@ -2,29 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuManager : MonoBehaviour
 {
-    public Transform head;
-    public float spawnDistance = 2;
-    public GameObject Pmenu;
-    public InputActionProperty showButton;
-    // Start is called before the first frame update
+    public GameObject wristUI;
+    public bool activeWristUI = true;
+
+
     void Start()
     {
-        
+        DisplayWristUI();
     }
 
-    // Update is called once per frame
-    void Update()
+
+    
+
+
+    public void Reload()
     {
-        if(showButton.action.WasPressedThisFrame())
-        {
-            Pmenu.SetActive(!Pmenu.activeSelf);
+        SceneManager.LoadScene(0);
 
-            Pmenu.transform.position = head.position + new Vector3(head.forward.x, 0, head.forward.z).normalized * spawnDistance;
-        }
-        Pmenu.transform.LookAt(new Vector3(head.position.x, Pmenu.transform.position.y, head.position.z));
-        Pmenu.transform.forward *= -1;
     }
+
+
+
+    public void DisplayWristUI()
+    {
+        if (activeWristUI)
+        {
+            wristUI.SetActive(false);
+            activeWristUI = false;
+            Time.timeScale = 1;
+        }
+        else if (!activeWristUI)
+        {
+            wristUI.SetActive(true);
+            activeWristUI = true;
+            Time.timeScale = 0;
+        }
+    }
+
+    public void PauseButtonPressed(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            DisplayWristUI();
+    }
+
+    public void RestartMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
 }

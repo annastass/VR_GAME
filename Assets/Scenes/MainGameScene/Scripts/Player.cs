@@ -6,11 +6,18 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public static Player MainPlayer;
-    public TransitionObj obj;
 
     public int coins = 0;
     public Text coinsText;
+
+
+    public static Player MainPlayer;
+    public TransitionObj obj;
+
+    void Update()
+    {
+        coinsText.text = coins.ToString();
+    }
 
     private void Awake()
     {
@@ -31,10 +38,9 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Coin"))
+        if (other.gameObject.tag == "Coin")
         {
             coins++;
-            other.gameObject.SetActive(false);
             Destroy(other.gameObject);
             coinsText.text = coins.ToString();
         }
